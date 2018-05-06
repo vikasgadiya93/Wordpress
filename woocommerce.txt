@@ -1,0 +1,37 @@
+to change the tab name 
+
+add_filter( 'woocommerce_product_tabs', 'woo_rename_tabs', 98 );
+function woo_rename_tabs( $tabs ) {
+global $product, $post;
+if ( $post->post_content ) {
+$tabs['description']['title'] = __( 'More Information' );
+}
+return $tabs;
+}
+
+
+Plugin - wishlist 
+(1)Yiit wishlist plugin (override also all things)(Woocommerce- test theme )
+      (!) https://support.yithemes.com/hc/en-us/articles/115001372967-Wishlist-How-to-count-number-of-products-wishlist-in-ajax
+      (!!) https://wordpress.org/support/topic/get-total-wishlist-via-ajax/?replies=2#post-6886464   
+
+
+Plugin - Zoom plugin 
+
+(1)zwoom-woocommerce-product-image-zoom
+(2)Yiit-ZOom-magnitfer (add body class so it work)
+(3)WOOZOOm - Zooms On Details. Focuses on Sales
+
+
+
+
+Plugin -compare product 
+
+(1). Products Compare for WooCommerce
+(2). TM WooCommerce Compare Wishlist
+(3).Woocommerce Compare Products (overide template also)(woocommerce -test-theme)
+(4).Woocommerce Compare Products 
+
+
+Plugin - Portfolio
+(1).a3 Portfolio 	
