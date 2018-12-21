@@ -1,0 +1,9 @@
+function scroll_more() {
+    if ( isset($_REQUEST) ) {
+        $dirName = dirname(__FILE__);
+        require_once ("$dirName/ajax/scroll_more.php"); 
+    }
+    die();
+}
+add_action( 'wp_ajax_scroll_more', 'scroll_more' );
+add_action( 'wp_ajax_nopriv_scroll_more', 'scroll_more' );
