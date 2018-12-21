@@ -1,0 +1,98 @@
+1.To add custom navigation menu
+   register_nav_menu( 'primary', __( 'Main Menu', 'practice' ) );	
+
+ To display navigation menu in front end
+                          <?php
+                                wp_nav_menu( array(
+                                'theme_location' => "primary",
+                                'menu_class'     => 'primary-menu',
+                                'items_wrap'      => '<ul id="%1$s" class="nav navbar-nav">%3$s</ul>'
+                                ));
+                            ?>
+
+2. To add class to custom menu
+footer.php
+ jQuery(function($) {
+     
+       $('.menu-item-has-children a').addClass('dropdown-toggle');  
+       $('.menu-item-has-children ul').addClass('dropdown-menu');
+       $('.menu-item-has-children ul').removeClass('sub-menu');  
+       $('.menu-item-has-children a').append('&nbsp;<i class="fa fa-angle-down"></i>');  
+       $('.dropdown-menu a').removeClass('dropdown-toggle');
+       $('.dropdown-menu a i').remove('');
+    });
+    jQuery(function($) {
+        $(' ul .current-menu-item').addClass('active');  
+    });
+
+
+3. fuction.php
+    
+add_filter( 'nav_menu_link_attributes', 'wpse154485_add_aria_haspopup_atts', 10, 3 );
+function wpse154485_add_aria_haspopup_atts( $atts, $item, $args ) {
+  if (in_array('menu-item-has-children', $item->classes)) {
+    $atts['aria-haspopup'] = 'true';
+     $atts['data-toggle'] = 'dropdown';
+     $atts['role'] = 'button';
+     $atts['aria-expanded'] = 'false';
+  }
+  return $atts;
+}
+
+
+
+
+
+4.parent link open & caret opens the dropdown 
+
+<script>
+    jQuery(function($) {
+        $('.menu-item-has-children a').addClass('dropdown-toggle');  
+        $('.menu-item-has-children ul').addClass('dropdown-menu');
+        $('.menu-item-has-children ul').removeClass('sub-menu');  
+        $('.menu-item-has-children').addClass('dropdown');  
+        // $('.menu-item-has-children a').append('&nbsp;<i class="fa fa-angle-down"></i>');  
+        $('.dropdown-menu a').removeClass('dropdown-toggle');
+        $('.dropdown-menu a i').remove('');
+    });
+    jQuery(function($) {
+        $(' ul .current-menu-item').addClass('active');  
+    });
+</script>
+<script> 
+    $(document).ready(function(){
+      $('#menu-primary-menu li.menu-item-has-children a').removeAttr('data-toggle');
+      $('#menu-primary-menu li.menu-item-has-children a:first').after('<i class="fa fa-angle-down dropdown-toggle" data-toggle="dropdown" aria-expanded="false"></i>');
+    });
+</script>
+
+
+
+5. To add class to anchor tag in wordpress meenu
+
+
+add_filter( 'nav_menu_link_attributes', 'add_link_atts', 10, 3);     
+function add_link_atts($atts,$item, $args) {
+    if( $args->theme_location == 'main_menu' ) {
+    $atts['class'] = "auto scrolling function";
+     }
+  return $atts;
+} 
+
+
+add_filter ( 'nav_menu_css_class', 'so_37823371_menu_item_class', 10, 4 );
+
+function so_37823371_menu_item_class ( $classes, $item, $args, $depth ){
+  $classes[] = 'nav-item';
+  return $classes;
+}
+
+add_filter( 'nav_menu_link_attributes', 'add_link_atts', 10, 3);     
+function add_link_atts($atts,$item, $args) {
+    if( $args->theme_location == 'main_menu' ) {
+    $atts['class'] = "nav-link";
+     }
+  return $atts;
+} 
+
+  

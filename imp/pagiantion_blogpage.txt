@@ -1,0 +1,17 @@
+                                    global $wp_query;
+                                    $big = 999999999;
+                                     $links = paginate_links( array(
+                                    'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
+                                    'format' => '?paged=%#%',
+                                    'prev_text' => __( '&laquo;', 'aag' ),
+                                    'next_text' => __( '&raquo;', 'aag' ),
+                                    'type'   => 'array',
+                                    'current' => max( 1, get_query_var('paged') ),
+                                    'total' => $the_query->max_num_pages
+                                    ) );
+                                    if($links){
+                                        foreach ( $links as $link ) {
+                                            echo "<li>$link</li>";
+                                        }
+                                     
+                                    }

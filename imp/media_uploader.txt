@@ -1,0 +1,45 @@
+steps 1. 
+add menu to function.php like this
+ 
+function general_admin_menus() {      
+    add_menu_page('General Settings', 'General Settings', 8, 'theme_settings', 'general_settings_page');
+  }
+add_action("admin_menu", "general_admin_menus"); 
+
+
+step2 . add page to your theme by a fuction.php
+
+
+    function general_settings_page()
+    {
+      
+  require_once ( get_stylesheet_directory() . '/admin/general_settings.php' );
+    
+}
+   
+ function theme_general_settings()
+    {
+  
+      require_once ( get_stylesheet_directory() . '/admin/general_settings.php' );
+
+    }   
+
+
+
+step3 . add media uploader your fuction.php
+
+   function load_admin_things() {
+        wp_enqueue_media();
+        wp_enqueue_script('general-admin');
+        wp_enqueue_script('media-upload');
+        wp_enqueue_script('thickbox');
+        wp_enqueue_style('thickbox');
+    }
+    add_action( 'admin_enqueue_scripts', 'load_admin_things' );   
+
+ 
+
+step 3. add page as general_settings in your template .
+
+
+

@@ -1,0 +1,15 @@
+function remove_menus_1(){  
+
+
+    $user = wp_get_current_user();
+    //if ( in_array( 'subadmin', (array) $user->roles ) ) {
+    // echo 'subadmin';
+    remove_menu_page( 'plugins.php' );
+    //The user has the "author" role
+}
+
+
+
+//Plugins
+
+add_action( 'admin_menu', 'remove_menus_1' );

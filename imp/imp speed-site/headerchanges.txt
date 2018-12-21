@@ -1,0 +1,5 @@
+<?php
+        define('TEMPLATE_URL',get_bloginfo('template_url'));
+        define('SITE_URL',get_bloginfo('url'));
+        define('JS_URL',esc_url( get_template_directory_uri()) ); 
+    ?>

@@ -1,0 +1,16 @@
+function fb_share() { 
+if (is_single()) { ?>
+
+<div class="fb_share">
+    <a name="fb_share" type="box_count" share_url="<?php the_permalink() ?>"
+      href="http://www.facebook.com/sharer.php">Share</a>
+    <script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>
+</div>
+<?php } 
+}
+
+add_action('thesis_hook_byline_item','fb_share');
+
+
+to use copy the code
+fb_share();

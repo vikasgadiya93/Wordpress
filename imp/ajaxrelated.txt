@@ -1,0 +1,224 @@
+            var validate_username = jQuery("#email").val(); 
+            var validate_password = jQuery("#password").val();
+
+            jQuery.ajax({
+                type: "POST",
+                url: '<?php echo get_bloginfo('url'); ?>/wp-admin/admin-ajax.php',
+                async: false,
+                data: {
+                    'action':'resend_activation_link',
+                    'validate_username':validate_username,
+                    'validate_password':validate_password,
+                },
+                success:function(response) {
+                    //alert(response);
+                    if(response == 1){
+                        jQuery("#email").css('border','1px solid #ff0000');
+                        jQuery("#password_error").html('Please check your email for the Activation link.');
+                        status= false;
+                    }
+                    else {
+                        jQuery("#password").css('border','1px solid #ff0000');
+                        jQuery("#password_error").html('You did not send email.Please try again.');
+                        status= false;  
+                    }
+                },
+                error: function(errorThrown){
+                    console.log(errorThrown);
+                }
+            });
+
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#submit").click(function() {
+            var temp="";
+            var email = $('#email').val();
+            if(email=="")
+                {
+                temp+="\nPlease Enter Email";
+            } 
+            else{
+                var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;   
+                if (!filter.test(email))
+                    {   
+                    temp+="\nPlease valid email format";
+                }
+            }
+            if(temp!="")   
+                {
+                alert(temp);
+                return false;
+            }
+            $.ajax({
+                url: "<?php echo admin_url('admin-ajax.php'); ?>",
+                type:"post",
+                data: {
+                    'action':'subscribe_ajax',
+                    'email' : email
+                },
+                success:function(html) {
+                    if(html == '1'){
+                        alert("Successfully Subscribed");
+                        document.getElementById('email').value=''; 
+                    }
+                    else
+                        {
+                        alert("Email already exists");
+                        document.getElementById('email').value=''; 
+                    }
+                },
+                error: function(errorThrown){
+                    console.log(errorThrown);
+                }
+            });
+        });
+    });
+</script>
+
+// Ajax subscribe code call
+function subscribe_ajax() {
+    if ( isset($_REQUEST) ) {
+        $dirName = dirname(__FILE__);
+        require_once ("$dirName/ajax/subscribe_ajax.php"); 
+    }
+    die();
+}
+add_action( 'wp_ajax_subscribe_ajax', 'subscribe_ajax' );
+add_action( 'wp_ajax_nopriv_subscribe_ajax', 'subscribe_ajax' );
+
+
+
+
+            var validate_username = jQuery("#email").val(); 
+            var validate_password = jQuery("#password").val();
+
+            jQuery.ajax({
+                type: "POST",
+                url: '<?php echo get_bloginfo('url'); ?>/wp-admin/admin-ajax.php',
+                async: false,
+                data: {
+                    'action':'resend_activation_link',
+                    'validate_username':validate_username,
+                    'validate_password':validate_password,
+                },
+                success:function(response) {
+                    //alert(response);
+                    if(response == 1){
+                        jQuery("#email").css('border','1px solid #ff0000');
+                        jQuery("#password_error").html('Please check your email for the Activation link.');
+                        status= false;
+                    }
+                    else {
+                        jQuery("#password").css('border','1px solid #ff0000');
+                        jQuery("#password_error").html('You did not send email.Please try again.');
+                        status= false;  
+                    }
+                },
+                error: function(errorThrown){
+                    console.log(errorThrown);
+                }
+            });
+
+
+
+<script type="text/javascript">
+    function validate_resend_activation_form(){
+
+        var val3 = $("#myselect option:selected").val();
+        var val4 = $("#txtName").val();
+        var val5 = $("#txtEmail").val();
+        var val6 = $("#phone_no").val();
+        var val7 = $("#txt_val").val();
+        var val8 = $("#txt_val2").val();
+
+        var dataString1 = 'v1='+val7+'&v2='+val8 +'&v3='+val3 +'&v4='+val4+'&v5='+val5;
+
+        /*      var validate_username = jQuery("#email").val(); 
+        var validate_password = jQuery("#password").val();*/
+
+        jQuery.ajax({
+            type: "POST",
+            url: '<?php echo get_bloginfo('url'); ?>/wp-admin/admin-ajax.php',
+            //async: false,
+            data: {
+                'action':'subscribe_ajax',
+                'data':dataString1
+            },
+            success:function(response) {
+                alert(response);
+                if(response == 1){
+                    alert("submit");
+                    // jQuery("#email").css('border','1px solid #ff0000');
+                    //  jQuery("#password_error").html('Please check your email for the Activation link.');
+                    //  status= false;
+                }
+                else {
+                    alert("not submit");
+                    // jQuery("#password").css('border','1px solid #ff0000');
+                    // jQuery("#password_error").html('You did not send email.Please try again.');
+                    // status= false;  
+                }
+            },
+            error: function(errorThrown){
+                console.log(errorThrown);
+            }
+        });
+    }
+</script>
+
+                data: {'action':'ajax_contact','data':dataString}, 
+
+
+   var fname =$("#fname").val();
+            var phone =$("#phone").val();
+            var email_id =$("#email_id").val();
+            var upload_file =$("#upload_file").val();
+            var message =$("#message").val();
+
+
+            var dataString = 'fname='+fname+'&phone='+phone +'&email_id='+email_id +'&upload_file='+upload_file+'&message='+message;
+
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        //$("#submit_form").click(function() {
+         $('#reg').submit(function(e){ e.preventDefault();
+           /* var subsc_email = $('#subsc_email').val();
+            if(subsc_email==""){
+                alert("Please Enter Email");
+                $("#subsc_email").focus();
+                return false;    
+            } 
+            else{
+                var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;   
+                if (!filter.test(subsc_email)){   
+                    alert("Please Enter valid email format");
+                    $("#subsc_email").focus();
+                    return false;  
+                }
+            }  */
+            $.ajax({
+                url: "<?php echo admin_url('admin-ajax.php'); ?>",
+                type:"post",
+                data: {'action':'subscribe_ajax','data':jQuery("#reg").serialize()}, 
+                success:function(html) {
+                    if(html == '1'){
+                        alert("Successfully Subscribed");
+                        document.getElementById('subsc_email').value=''; 
+                    }else{
+                        alert("Email already exists");
+                        document.getElementById('subsc_email').value=''; 
+                    }
+                },
+                error: function(errorThrown){
+                    console.log(errorThrown);
+                }
+            });
+        });
+    });
+</script>

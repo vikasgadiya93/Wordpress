@@ -1,0 +1,23 @@
+<?php
+        global $dynamic_featured_image;
+        $featured_images = $dynamic_featured_image->get_featured_images( 4 );
+        foreach( $featured_images as $image ) {
+            echo "<img src='{$image['thumb']}' alt='Dynamic Featured Image' />";
+        }
+    ?>  
+
+<?php  // install $dynamic_featured_image plugin
+    global $dynamic_featured_image;
+    $featured_images = $dynamic_featured_image->get_featured_images( $posts_id );
+
+    //You can now loop through the image to display them as required
+    //For example
+    foreach( $featured_images as $image ) {
+        echo "<a href='{$image['full']}'>";
+        echo "<img src='{$image['thumb']}' alt='Dynamic Featured Image' />";
+        echo "</a>";
+    }
+?>
+Dynamic Featured Image
+
+https://github.com/ankitpokhrel/Dynamic-Featured-Image/wiki

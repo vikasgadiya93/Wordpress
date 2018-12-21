@@ -1,0 +1,15 @@
+function simple_encrypt($text)
+    {
+        return base64_encode($text);
+    }
+
+    function simple_decrypt($text)
+    {
+        return base64_decode($text);
+    }
+
+$encrypt_id= simple_encrypt(email address here);
+
+$active_log=$_REQUEST['get encrypted parameter'];
+$decoded = simple_decrypt($active_log);
+

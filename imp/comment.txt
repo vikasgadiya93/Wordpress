@@ -1,0 +1,11 @@
+<?php foreach (get_comments() as $comment): ?>
+  <?php echo $comment->comment_author; ?>      
+                  <span class="post-date">
+      <?php 
+          $commentid =  $comment->comment_id;
+          $d = "F j, Y";
+          $comment_date = get_comment_date( $d, $commentid );
+          echo $comment_date;
+       ?>
+                         
+       <?php echo $comment->comment_content; ?>

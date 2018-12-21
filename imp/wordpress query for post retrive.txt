@@ -1,0 +1,99 @@
+1. wp query to retrive post 
+
+ <?php  
+    $args=array(
+    'post_type' => 'post',
+    'category_name'=>'upcoming-short-courses',
+    'posts_per_page' => '4',
+    'order' => 'DESC',
+    );
+    $the_query = new WP_Query( $args );
+    if ( $the_query->have_posts() ) : while ( $the_query->have_posts() ) : $the_query->the_post();
+        ?>  
+        <?php
+            if ( has_post_thumbnail( ) ) {
+                the_post_thumbnail('post-thumbnail', array( 'class'    => "img-responsive")); 
+            } 
+        ?>
+
+
+        <?php the_modified_time('j M Y') ?>
+        <a href="<?php the_permalink(); ?>"><?php the_title(); ?> </a>
+
+        <?php endwhile; endif; ?>
+<? <?php wp_reset_query();?>
+
+// slug query
+$args = array( 'post__in' => array(46),'slug' => 'about-our-church');
+2. wp query to Retrive page title , content, link, id
+
+            <?php
+                // query for the about page
+                $your_query = new WP_Query( 'pagename=Request Demo' );
+                // "loop" through query (even though it's just one page) 
+                while ( $your_query->have_posts() ) : $your_query->the_post();
+                  ?>
+                  <a href="<?php the_permalink(); ?>" > pagename </a>
+                                  
+                  <?php   endwhile;    wp_reset_postdata();
+                // reset post data (important!)
+               
+               ?> 
+
+
+3. post retrive by id,slug
+                <?php 
+                     $args = array( 
+                    'post__in' => array(60),
+                    );
+                    $the_query = new WP_Query( $args );
+                    if ( $the_query->have_posts() ) : while ( $the_query->have_posts() ) : $the_query->the_post();
+                        ?>
+                      <?php echo the_title(); ?>  
+                       <?php
+                           if ( has_post_thumbnail( ) ) {
+                                the_post_thumbnail('post-thumbnail', array( 'class'    => "img-responsive")); 
+                            }  ?>
+                       <?php $prod_img = wp_get_attachment_url( get_post_thumbnail_id( get_the_id() ) ); ?> 
+                      <img src="<?php echo $prod_img; ?>" width="798" height="400">
+                  
+                       <?php echo the_content(); ?>
+                         <?php endwhile; endif; ?>
+                <?php wp_reset_query(); ?>
+
+
+
+4. Get post by today or this week or this moth use this
+
+$today = getdate();
+  
+    $args = array(
+    'posts_per_page' => -1,
+    'post_type' => 'post',
+    'date_query' => array(
+        array(
+           'year'  => $today['year'],
+           'month' => $today['mon'],
+           'day'   => $today['mday'],
+        ),
+    ),
+);
+
+$posts = get_posts( $args );
+  echo "<pre>"; print_r($posts); 
+
+
+5. meta query for post
+
+$query = "SELECT * FROM $wpdb->users as wu ,$wpdb->usermeta as wc , $wpdb->usermeta as wc2,$wpdb->usermeta as wc3";        
+    $query .= " Where wu.ID = wc.user_id and wu.ID = wc2.user_id and wu.ID = wc3.user_id ";
+
+    if($np_name != ""){   
+       // $query .= " AND wu.user_login LIKE  '%" .$np_name. "%'";
+        $query .= " AND  ((wc3.meta_key LIKE '%organization_name%'  AND wc3.meta_value LIKE  '%" .$np_name. "%'))";
+    }
+    if($city_name != ""){   
+        $query .= " AND ((wc.meta_key LIKE '%city%'  AND wc.meta_value LIKE  '%" .$city_name. "%'))";
+    }         
+    $query .= " AND ((wc2.meta_key = 'wp_hhnxr12b47_capabilities' AND wc2.meta_value LIKE '%vendor%')) Group by wu.user_login ";
+

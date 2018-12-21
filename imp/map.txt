@@ -1,0 +1,14 @@
+https://wrightshq.com/playground/placing-multiple-markers-on-a-google-map-using-api-3/
+
+
+https://gist.github.com/parth1020/4481893
+
+https://stackoverflow.com/questions/29463131/mapping-multiple-locations-with-google-maps-javascript-api-v3-and-geocoding-api
+
+http://jsfiddle.net/P2QhE/ important
+
+
+
+https://stackoverflow.com/questions/19640055/multiple-markers-google-map-api-v3-from-array-of-addresses-and-avoid-over-query
+
+https://stackoverflow.com/questions/17417831/embedding-google-map-with-address

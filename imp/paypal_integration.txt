@@ -1,0 +1,7 @@
+http://www.codexworld.com/paypal-standard-payment-gateway-integration-php/
+
+http://www.codexworld.com/creating-paypal-sandbox-test-account-website-payments-pro-account/
+http://www.phpgang.com/how-to-integrate-payment-system-with-paypal_249.html
+
+http://www.evoluted.net/thinktank/web-development/paypal-php-integration
+http://www.dollarfry.com/paypal-integration-guide-php/

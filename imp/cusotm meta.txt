@@ -1,0 +1,110 @@
+10. Custom post meta 
+ <?php 
+  // Add meta New post in Backend 
+
+    function myplugin_add_meta_box() {
+
+        $screens = array( 'post' );
+
+        foreach ( $screens as $screen ) {
+
+            add_meta_box(
+            'myplugin_sectionid',
+            __( 'Meta Information', 'myplugin_textdomain' ),
+            'myplugin_meta_box_callback',
+            $screen
+            );
+        }
+    }
+    add_action( 'add_meta_boxes', 'myplugin_add_meta_box' );
+
+    function myplugin_meta_box_callback( $post ) {
+        wp_nonce_field( 'myplugin_meta_box', 'myplugin_meta_box_nonce' );
+
+    ?>
+    <?php $slider_text_1= get_post_meta( $post->ID, 'slider_text_1', true );   ?>
+    <?php $post_class = get_post_meta( $post->ID, 'post_class', true );   ?>
+    <?php $full_article = get_post_meta( $post->ID, 'full_article', true );   ?>
+
+    <div class="rwmb-label"> 
+        <span style="font-size: 18px; font-weight: bold; line-height: 50px;">Slider text 1 </span> 
+    </div> 
+    <input type="text" autocomplete="off" spellcheck="true" id="title" value="<?php echo $slider_text_1;?>" size="97" name="slider_text_1">
+    <br>
+
+    <div class="rwmb-label"> 
+        <span style="font-size: 18px; font-weight: bold; line-height: 50px;"> Post Class </span> 
+    </div> 
+    <input type="text" autocomplete="off" spellcheck="true" id="title" value="<?php echo $post_class;?>" size="97" name="post_class">
+    <br>
+    <div class="rwmb-label"> 
+        <span style="font-size: 18px; font-weight: bold; line-height: 50px;"> Read Full Article </span> 
+    </div> 
+    <input type="text" autocomplete="off" spellcheck="true" id="title" value="<?php echo $full_article;?>" size="97" name="full_article">
+
+
+   
+    <?php
+}
+
+function myplugin_save_meta_box_data( $post_id ) {
+
+    /*
+    * We need to verify this came from our screen and with proper authorization,
+    * because the save_post action can be triggered at other times.
+    */
+
+    // Check if our nonce is set.
+    if ( ! isset( $_POST['myplugin_meta_box_nonce'] ) ) {
+        return;
+    }
+
+    // Verify that the nonce is valid.
+    if ( ! wp_verify_nonce( $_POST['myplugin_meta_box_nonce'], 'myplugin_meta_box' ) ) {
+        return;
+    }
+
+    // If this is an autosave, our form has not been submitted, so we don't want to do anything.
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+
+    // Check the user's permissions.
+    if ( isset( $_POST['post_type'] ) && 'page' == $_POST['post_type'] ) {
+
+        if ( ! current_user_can( 'edit_page', $post_id ) ) {
+            return;
+        }
+
+    } else {
+
+        if ( ! current_user_can( 'edit_post', $post_id ) ) {
+            return;
+        }
+    } //echo $_POST[ 'meta-image' ];die;
+    if( isset( $_POST[ 'meta-image' ] ) ) {
+        update_post_meta( $post_id, 'offer-image', $_POST[ 'meta-image' ] );
+    }
+
+    /* OK, it's safe for us to save the data now. */
+
+    // Make sure that it is set.
+    /*if ( ! isset( $_POST['myplugin_new_field'] ) ) {
+    return;
+    }*/
+
+    // Sanitize user input.
+    $slider_text_1 = sanitize_text_field( $_POST['slider_text_1'] );
+    $post_class = sanitize_text_field( $_POST['post_class'] );
+    $full_article = sanitize_text_field( $_POST['full_article'] );
+
+
+    //    $app = sanitize_text_field( $_POST['post_text_app'] );   
+
+    update_post_meta( $post_id, 'slider_text_1', $_POST['slider_text_1'] );
+    update_post_meta( $post_id, 'post_class', $_POST['post_class'] );
+    update_post_meta( $post_id, 'full_article', $_POST['full_article'] );
+
+    // update_post_meta( $post_id, $_POST['title_1'], $_POST['post_text_app'] );
+}
+add_action( 'save_post', 'myplugin_save_meta_box_data' ); 

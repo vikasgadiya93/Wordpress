@@ -1,0 +1,122 @@
+// for meta box multiple image
+// locallhost/perioppartner/function.php
+// locallhost/markbowker/function.php
+
+add_action('admin_init', 'hhs_add_meta_boxes', 1);
+    function hhs_add_meta_boxes() {
+        add_meta_box( 'repeatable-fields', 'Slider Images', 'hhs_repeatable_meta_box_display', 'event', 'normal', 'default');
+}
+
+ function hhs_repeatable_meta_box_display() {
+        global $post;
+        $repeatable_fields = get_post_meta($post->ID, 'upload_banner_image', true);
+        wp_nonce_field( 'hhs_repeatable_meta_box_nonce', 'hhs_repeatable_meta_box_nonce' );
+    ?>
+    <script type="text/javascript">
+        jQuery(document).ready(function( $ ){
+            $( '#add-row' ).on('click', function() {
+              var vikasd =     $('#repeatable-fieldset-one tr:last').attr('id');
+              var arr = vikasd.split('-');
+              var id_number = arr[1]   ;
+               id_number = +id_number + 1;
+              $('#repeatable-fieldset-one').append('<tr id="tr-'+id_number+'"><td><input type="text" id="upload_banner_image'+id_number+'" class="widefat upload_banner_image" name="upload_banner_image[]" style=" margin-right: 10px; margin-top: 2px; width: 100%;"/></td><td> <input id="upload_banner_button_image'+id_number+'" class="image_button button" type="button" value="Upload banner image"  /></td><td><a class="button remove-row" href="#">Remove</a></td></tr>');
+                return false;
+            });  
+        jQuery( '#repeatable-fieldset-one').on('click','.remove-row', function() {
+                $(this).parents('tr').remove();
+                return false;
+            });
+        });
+    </script>
+    <script language='JavaScript'>
+    jQuery(document).ready(function() {
+       jQuery( '#repeatable-fieldset-one').on('click','.image_button', function() {
+       formfield =  jQuery(this).closest('tr').find('.upload_banner_image').attr('name');
+       formid = jQuery(this).closest('tr').find('.upload_banner_image').attr('id');
+       tb_show('', 'media-upload.php?type=image&TB_iframe=true');
+
+              window.send_to_editor = function(html_val) {
+                   if(jQuery(html_val).attr('src')) {
+                      imgurl = jQuery(html_val).attr('src');
+                   }
+                   else {
+                      imgurl = jQuery(html_val).attr('href');
+                   }
+                   
+              jQuery("#"+formid).val(imgurl);
+              tb_remove();
+              }
+           return false;
+       });
+    });
+    </script> 
+
+    <table id="repeatable-fieldset-one" width="100%">
+        <tbody>
+            <?php
+               //  echo "<pre>"; print_r($repeatable_fields); echo "</pre>";
+                if ( $repeatable_fields ) :
+                 $i =1; 
+                    foreach ( $repeatable_fields as $key => $field ) {         
+                    ?>
+                    <tr id="tr-<?php echo $i; ?>">
+                        <td><input type="text" id="upload_banner_image<?php echo $i; ?>" class="widefat upload_banner_image" name="upload_banner_image[]" style=" margin-right: 10px; margin-top: 2px; width: 100%;" value="<?php if($field['upload_banner_image'] != '') echo esc_attr( $field['upload_banner_image'] ); ?>" /></td>
+                        <td> <input id="upload_banner_button_image<?php echo $i; ?>" class="image_button button" type="button" value="Upload banner image"  /></td>
+                        <td><a class="button remove-row" href="#">Remove</a></td>
+                    </tr>
+                 
+                    <?php
+                        $i++;
+                    }
+                    else :
+                    // show a blank one
+                ?>
+                <tr id="tr-1">
+                    <td><input type="text" class="widefat upload_banner_image"  style=" margin-right: 10px; margin-top: 2px; width: 100%;" id="upload_banner_image1" name="upload_banner_image[]" /></td>
+                    <td> <input id="upload_banner_button_image1" class="image_button button" type="button" value="Upload banner image"  /></td>
+                    <td><a class="button remove-row" href="#">Remove</a></td>
+                </tr>
+                <?php endif; ?>   
+        </tbody>
+    </table>
+
+    <p><a id="add-row" class="button" href="#">Add another</a></p>
+    <?php
+}
+add_action('save_post', 'hhs_repeatable_meta_box_save');
+function hhs_repeatable_meta_box_save($post_id) {
+    if ( ! isset( $_POST['hhs_repeatable_meta_box_nonce'] ) ||
+    ! wp_verify_nonce( $_POST['hhs_repeatable_meta_box_nonce'], 'hhs_repeatable_meta_box_nonce' ) )
+        return;
+
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+        return;
+
+    if (!current_user_can('edit_post', $post_id))
+        return;
+
+    $old = get_post_meta($post_id, 'repeatable_fields', true);
+
+    $new = array();
+
+
+    $names = $_POST['upload_banner_image'];
+
+    $urls = $_POST['url'];
+
+    $count = count( $names );
+    for ( $i = 0; $i < $count; $i++ ) {
+        if ( $names[$i] != '' ) :
+            $new[$i]['upload_banner_image'] = stripslashes( strip_tags( $names[$i] ) );
+
+            if ( $urls[$i] == '' )
+                $new[$i]['url'] = '';   
+            else
+                $new[$i]['url'] = stripslashes( $urls[$i] ); // and however you want to sanitize
+            endif;
+    }
+    if ( !empty( $new ) && $new != $old )
+        update_post_meta( $post_id, 'upload_banner_image', $new );
+    elseif ( empty($new) && $old )
+        delete_post_meta( $post_id, 'upload_banner_image', $old );
+}

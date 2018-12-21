@@ -1,0 +1,85 @@
+//custom pagination for wordpress
+
+                        global $wpdb;
+                        $tbl_cat_name = "wp_image_upload"; 
+                        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
+                        $limit = 10;
+                        $user_id = get_current_user_id();
+                        $offset = ( $pagenum - 1 ) * $limit;
+                       
+                      /* 
+                        //use this for wp-admin
+                        if($user_id==1)
+                        {
+                            $data ="select * from `$tbl_cat_name` order by id DESC LIMIT $offset, $limit";
+                        }else{
+                            $data ="select * from `$tbl_cat_name` WHERE user_id=".$user_id." order by id DESC LIMIT $offset, $limit";
+                        } */
+                        $data ="select * from `$tbl_cat_name` order by id DESC LIMIT $offset, $limit";
+                        $data1= $wpdb->get_results($data);
+                        $count = 1;
+                        $i = 1;
+                        if(!empty($data1))
+                        {
+                            foreach( $data1 as $print ) 
+                            {
+                                $id= $print->id;
+                                $cat=$print->catgory_name;
+                                $sub_cat=$print->sub_cat;
+                            ?>  
+                            <tr class="body">
+                                <td><input name="checkbox[]" type="checkbox" id="checkbox[]" value="<?php echo $id  ; ?>"/>    </td>
+                                <!--<td><input name="checkbox[]" type="checkbox" value="<?php  $print->id; ?>">    </td>-->
+                                <td><?php echo $print->id;  ?></td>
+                                <td><?php echo $print->catgory_name; ?></td> 
+                                <td><?php echo $print->sub_cat; ?></td> 
+                                      
+                                <td><img src="<?php echo $print->my_image_upload; ?>" width="100" height="80" > </td>  
+                                <td> <label for="Address">[output catgory_name="<?php echo $cat; ?>"]</label></td> 
+                                
+                                <td> <a href="admin.php?page=image_edit&action=edit_ord&id=<?php echo $print->id; ?>" class="ord_edit" title="Click To Edit">Edit</a> 
+                               | <a href="admin.php?page=image_delete&action=delete_ord&id=<?php echo $print->id; ?>" class="ord_delete" title="Click To Delete" onclick="return confirm('Are You Sure To Delete ?');">  Delete </a></td> </tr>
+                            <?php 
+                                $count++;     
+                                $i++;     
+                            ?>
+                            <?php
+                          }  
+                        }
+                        else{ 
+                        ?>
+                        <tr>
+                            <td class="colspanchange" colspan="5">No Record Found.</td>
+                        </tr>
+                        <?php } ?>
+                </tbody>
+                <!--<td colspan="5" align="center" bgcolor="#FFFFFF"><input name="delete" type="submit" id="delete" value="Delete"></td>-->
+
+                </table>
+                <?php $total_class = $wpdb->get_var( "SELECT COUNT(`id`) FROM wp_image_upload" ); 
+                    if($total_class < $limit)
+                    {
+                        $cnt = $total_class; 
+                    }else
+                    {
+                        $cnt = $limit; 
+                    }
+                ?>
+                <div class="dataTables_info" id="example_info" role="status" aria-live="polite">Showing 1 to <?php echo $cnt; ?> of <?php echo $total_class; ?> entries</div>
+                <?php
+                    $total = $wpdb->get_var( "SELECT COUNT(`id`) FROM wp_image_upload" );
+                    $num_of_pages = ceil( $total / $limit );
+                    $page_links = paginate_links( array(
+                    'base' => add_query_arg( array('pagenum'=>'%#%', 'searchlocation' => $_POST['searchlocation'], 'txtlocation_name' => $_POST['txtlocation_name'], 'view_status' => $_POST['view_status']) ),
+                    'format' => '',
+                    'prev_text' => __( '&laquo;', 'aag' ),
+                    'next_text' => __( '&raquo;', 'aag' ),
+                    'total' => $num_of_pages,
+                    'current' => $pagenum
+                    ) );
+                    if( $page_links ) {
+                    ?>
+                    <?php
+                        echo '<div class="tablenav"><div class="tablenav-pages" style="margin: 1em 0; float:left;">' . $page_links . '</div></div>';
+                    }
+                ?>

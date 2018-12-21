@@ -1,0 +1,32 @@
+    jQuery("#accordion").on("hidden.bs.collapse", function (e) {
+        jQuery(e.target).closest(".panel-default")
+        .find(".panel-heading span")
+        .removeClass("glyphicon glyphicon-minus")
+        .addClass("glyphicon glyphicon-plus");
+    });
+    jQuery("#accordion").on("shown.bs.collapse", function (e) {
+        jQuery(e.target).closest(".panel-default")
+        .find(".panel-heading span")
+        .removeClass("glyphicon glyphicon-plus")
+        .addClass("glyphicon glyphicon-minus");
+    });
+
+// to open first tab 
+ <script type="text/javascript">
+            jQuery(document).ready(function($) {
+                $('#tabs_1').click();
+            });
+
+</script>
+
+
+// to add plus minus in the tab 
+
+
+<script type="text/javascript">
+$('.collapse').on('shown.bs.collapse', function(){
+    $(this).parent().find(".fa-plus").removeClass("fa-plus").addClass("fa-minus");
+    }).on('hidden.bs.collapse', function(){
+    $(this).parent().find(".fa-minus").removeClass("fa-minus").addClass("fa-plus");
+    });
+</script>

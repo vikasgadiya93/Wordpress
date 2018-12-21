@@ -1,0 +1,275 @@
+	cretae a folder in root as ajax & make file 'subscribe_ajax.php' in  it
+add  this in function.php file
+1. functionp.php copy 
+//code
+
+  function subscribe_ajax() {
+    if ( isset($_REQUEST) ) {
+        $dirName = dirname(__FILE__);
+        require_once ("$dirName/ajax/subscribe_ajax.php"); 
+    }
+    die();
+}
+add_action( 'wp_ajax_subscribe_ajax', 'subscribe_ajax');
+add_action( 'wp_ajax_nopriv_subscribe_ajax', 'subscribe_ajax');
+
+
+2. copy this to your template
+// code
+
+
+<div class="container">
+    <form  role="form" enctype="multipart/form-data" action="" name="reg" id="reg" method="post">
+        <div class="form-group">
+            <div class="col-sm-6">
+                <input type="text" name="txtName" id="txtName" class="form-control" placeholder="Enter Name" onblur="return valName();">
+                <span style="display: none" generated="true" class="errorAll field-validation-valid" id="txtName_error" for="txtName_error">&nbsp;</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6">
+                <div class="radio-option">
+                    <input type="hidden" name="txt_val" id="txt_val" class="txt_val">
+                    <input type="radio" value="yes" class="css-radio" id="y" name="checkboxG1">
+                    <label class="css-label" for="y">Yes</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" value="no" class="css-radio" id="s" name="checkboxG1">
+                    <label class="css-label" for="s">No</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6">
+                <input type="text" class="form-control" placeholder="Enter Telephone" name="phone_no" id="phone_no" onblur="return valMob1();">
+                <span style="display: none" generated="true" class="errorAll field-validation-valid" id="phone_no_error" for="phone_no_error">&nbsp;</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6">
+                <input type="text" name="txtEmail" id="txtEmail" class="form-control" placeholder="Enter Email Address" onblur="return valEmail1();">
+                <span style="display: none" generated="true" class="errorAll field-validation-valid" id="txtEmail_error" for="txtEmail_error">&nbsp;</span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+        <div class="row">
+            <div class="col-sm-2">
+                <div class="btn btn-file"> 
+                    <input type="file" onblur="return valfile();" id="resume" name="resume">
+                    <label style="display: none" generated="true" class="errorAll" id="resume_error" for="resume_error">&nbsp;</label>
+                </div>
+            </div>
+        </div>
+        <button id="submit_form1"  class="btn-next pull-right" onclick="validate_resend_activation_form();" type="button" ><i class="icon-next"></i> Submit form</button>
+    </form>
+</div>
+
+<script type="text/javascript"> 
+    function validate_resend_activation_form() {
+        var status = true;
+     
+        if(valName() == false){
+            status = false;
+        }    
+        if(valEmail1() == false){
+            status = false;
+        }   
+        if(valMob1() == false){
+            status = false;
+        }
+        if(valfile() == false){
+            status = false;
+        }
+        if(status == false){    
+            
+            return status;
+        
+       }else{
+
+            var val1 = $("input[type='radio'][name='checkboxG1']:checked").val(); 
+            var attach_file = $('input[name=resume]')[0].files[0];
+            var Name = $("#txtName").val();
+            var Email = $("#txtEmail").val();
+            var Phone = $("#phone_no").val();
+
+            var post_data = new FormData();    
+            post_data.append( 'userName', Name );
+            post_data.append( 'userEmail', Email );
+            post_data.append( 'userPhone',Phone  );
+            post_data.append( 'gender',val1  );
+            post_data.append( 'file_attach', attach_file );
+            post_data.append('action', 'subscribe_ajax'); 
+
+        $.ajax({
+            url: "<?php echo admin_url('admin-ajax.php'); ?>",
+            type:"post",
+            processData: false,
+            contentType: false,
+            data :  post_data,
+            success:function(html) {
+                if(html == '1'){
+                    alert("Successfully Submit");
+                  $("input[type=text]").val("");
+                  $("input[type=file]").val("");
+                }
+                else
+                    {
+                    alert("Not submit");
+                }
+            },
+            error: function(errorThrown){
+                console.log(errorThrown);
+            }
+        });
+       }
+    }
+    
+    function valName() {
+        var txtName = jQuery("#txtName").val();
+        var regexp = /^[a-zA-Z ]*$/; 
+        if(txtName == '') {
+            jQuery("#txtName_error").css("display","");
+            jQuery("#txtName_error").html('Please Enter First Name');
+            return false; 
+        }
+        else if(txtName.search(regexp) == -1) {
+            jQuery("#txtName_error").css("display","");
+            jQuery("#txtName_error").html('Please Enter valid First Name ');
+            return false; 
+        }
+        else {  
+            jQuery("#txtName_error").css("display","none");
+            return true;   
+        }
+    }
+    function valEmail1() {
+        var txtEmail = jQuery("#txtEmail").val();
+        var reg_email = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+        if(txtEmail == '') {
+            jQuery("#txtEmail_error").css("display","");
+            jQuery("#txtEmail_error").html('Please Enter Email');
+            return false; 
+        }
+        else if(!reg_email.test(txtEmail)) {
+            jQuery("#txtEmail_error").css("display","");
+            jQuery("#txtEmail_error").html('Please Enter Valid Email');
+            return false; 
+        }
+        else {  
+            jQuery("#txtEmail_error").css("display","none");
+            return true;   
+        }
+    }  
+    function valMob1() { 
+        var phone_no = jQuery("#phone_no").val();
+        var regexp = /^[0-9 ]*$/;
+        if(phone_no == '') {
+            jQuery("#phone_no_error").css("display","");
+            jQuery("#phone_no_error").html('Please Enter Phone Number');
+            return false; 
+        }
+        else if(phone_no.search(regexp) == -1) {
+            jQuery("#phone_no_error").css("display","");
+            jQuery("#phone_no_error").html('Please Enter Valid Phone Number');
+            return false; 
+        }
+        else {  
+            jQuery("#phone_no_error").css("display","none");
+            return true;   
+        }
+    }
+    function valfile() {
+        var resume = jQuery("#resume").val();           
+        if(resume == '') {
+            jQuery("#resume_error").css("display","");
+            jQuery("#resume_error").html('Please enter Upload CV');
+            return false; 
+        }   else {  
+            jQuery("#resume_error").css("display","none");
+            return true;   
+        }
+    } 
+      
+</script>
+
+
+3. open 'subscribe_ajax.php'  and copy the code
+
+<?php
+      
+    //parse_str($_POST['data'], $_POST);
+    global $wpdb;
+  //  global $data;
+
+    if(isset($_POST)){
+
+       // print_r($_FILES);       // To check file is there or not
+        $img = $_FILES['file_attach']['name'] ;
+        $uploads = wp_upload_dir(); 
+        $upload_dir = $uploads['basedir']; 
+        $upload_dir1 = $uploads['baseurl']; 
+
+        $new_upload= $upload_dir."/CV/";  
+        $new_upload1= $upload_dir1."/CV/";
+    
+        $file = $new_upload .basename($_FILES['file_attach']['name']);
+      
+        $file1 = $new_upload1."".$img; 
+        
+        move_uploaded_file($_FILES['file_attach']['tmp_name'], $file);
+   
+        $gender   = $_POST['gender'];                  
+        $txtName  = $_POST['userName'];
+        $txtEmail = $_POST['userEmail'];
+        $phone_no = $_POST['userPhone'];
+
+
+        $data = array("name"=>$txtName,"email"=>$txtEmail,"comments"=>$img,"contactno"=>$phone_no,"gender"=>$gender );
+       //  print_r($data);
+        $insert = $wpdb->insert("wp_contact",$data);
+        echo "1";
+        if($insert)
+        { 
+            $to = $subsc_email;
+            $subject = "claim Enquery";
+
+            $message.="<style type='text/css'>
+            #sign{
+            display:none;
+            }
+            a { color: #2D7BE0; }
+            a:hover { text-decoration: none; }
+            </style>
+            <table style='background: #eee; padding-left:10px;' width='100%'>
+            <tr>
+            <th colspan='2' bgcolor='#fff' style='padding: 5px;background-color: #fff; text-align: left;' width='20%'> Gender </th>
+            <td bgcolor='#fff' style='padding: 5px; background-color: #fff;' align='center' width='2%'> : </td>
+            <td bgcolor='#fff' style='padding: 5px;background-color: #fff; text-align: left;'>".$myselect."</td>
+            </tr>  
+            <tr>
+            <th colspan='2' bgcolor='#fff' style='padding: 5px;background-color: #fff; text-align: left;' width='20%'> Name </th>
+            <td bgcolor='#fff' style='padding: 5px; background-color: #fff;' align='center' width='2%'> : </td>
+            <td bgcolor='#fff' style='padding: 5px;background-color: #fff; text-align: left;'>".$txtName."</td>
+            </tr>  
+            <tr>
+            <th colspan='2' bgcolor='#fff' style='padding: 5px;background-color: #fff; text-align: left;' width='20%'> Email </th>
+            <td bgcolor='#fff' style='padding: 5px; background-color: #fff;' align='center' width='2%'> : </td>
+            <td bgcolor='#fff' style='padding: 5px;background-color: #fff; text-align: left;'>".$txtEmail."</td>
+            </tr>  
+            <tr>
+            <th colspan='2' bgcolor='#fff' style='padding: 5px;background-color: #fff; text-align: left;' width='20%'> Phone number </th>
+            <td bgcolor='#fff' style='padding: 5px; background-color: #fff;' align='center' width='2%'> : </td>
+            <td bgcolor='#fff' style='padding: 5px;background-color: #fff; text-align: left;'>".$phone_no."</td>
+            </tr>  
+            </table>
+            <br>"; 
+            $headers = "From: pepl <vikas@redsparkinfo.com>\r\n";
+            $headers .= "MIME-Version: 1.0\r\n";
+            $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+            wp_mail( $to, $subject, $message, $headers );
+            $emailSent = true;   
+
+
+        }
+    }                 
+?>

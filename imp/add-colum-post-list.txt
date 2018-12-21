@@ -1,0 +1,73 @@
+//order colum changes
+add_filter( 'manage_parking_order_posts_columns', 'admin_post_header_columns');
+add_action( 'manage_parking_order_posts_custom_column', 'admin_post_data_row', 10, 2);
+
+function admin_post_header_columns( $columns ) {
+    $columns = array(
+        'cb' => '<input type="checkbox" />',
+        'title' => __( 'Order Number' ),
+        'author' => __( 'Name of buyer' ),
+        'order_type' => __( 'Order type' ),
+        'date' => __( 'Date' )
+    );
+
+    return $columns;
+}
+function admin_post_data_row($column_name, $post_id)
+{
+    switch($column_name)
+    {
+        case 'order_type':        
+            // Logic to display post 'Note' field information here.
+            $post_note = get_post_meta($post_id, 'order_type', true);
+            if ($post_note == 'monthly'){
+                echo 'Recurring ';
+            }else{
+                echo 'Non Recurring ';
+            }   
+
+            break;
+
+        default:
+            break;
+    }
+}
+
+
+///search in custom post type with meta values
+
+function wpse_29570_where_filter($where, $query){
+        global $wpdb,$wp_query;;
+         
+        if( is_search() ) {
+        if ($query->query_vars['post_type'] == 'orders') {
+            $search= get_query_var('s');
+            
+            $order_ID = array();
+          
+            $qry_2 =  "SELECT post_id  FROM wp_postmeta WHERE ( meta_key='delear_busniess_name' AND meta_value LIKE '%$search%' ) or ( meta_key='order_status' AND meta_value LIKE '%$search%' )";
+            $orderID = $wpdb->get_results( $qry_2 );
+            foreach($orderID as $orderkey){
+                $order_ID[] = $orderkey->post_id;
+             } 
+            $order_ID = implode(',',$order_ID);
+            // from order status
+          
+
+            $query=$wpdb->prepare("SELECT ID FROM $wpdb->users WHERE ( user_email LIKE '%%%s%%' )",$search);
+            $authorID= $wpdb->get_var( $query );
+            if($authorID){
+               $where = "  AND  ( wp_posts.post_author = {$authorID}  AND wp_posts.post_type = 'orders') ";
+            }
+            if($order_ID){
+              $where = "AND  ( wp_posts.ID IN (".$order_ID.") AND wp_posts.post_type = 'orders') ";  
+            }
+          
+ 
+   
+        }
+    }
+         return $where;
+    }
+
+add_filter('posts_where','wpse_29570_where_filter',10, 2);

@@ -1,0 +1,19 @@
+1. config file path in wordpress theme
+
+require( '../../../../../wp-config.php' );
+global $wpdb;
+
+ $dbname =  DB_NAME;
+ $dbpass = DB_PASSWORD;
+ $dbuser = DB_USER;
+ $dbhost = DB_HOST; 
+
+2. Config file path in plugin
+
+require( '../../wp-config.php' );
+global $wpdb;
+
+ $dbname =  DB_NAME;
+ $dbpass = DB_PASSWORD;
+ $dbuser = DB_USER;
+ $dbhost = DB_HOST; 

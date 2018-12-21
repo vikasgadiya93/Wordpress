@@ -1,0 +1,11 @@
+To add new topic button
+
+https://bbpress.org/forums/topic/how-to-add-new-topic-button/
+
+https://codex.bbpress.org/features/shortcodes/
+
+
+
+
+Forum example
+https://en.forums.wordpress.com/tags/comment-scroll-bar

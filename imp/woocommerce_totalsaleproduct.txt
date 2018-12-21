@@ -1,0 +1,13 @@
+$sql =   "SELECT SUM(meta_value) FROM wp_woocommerce_order_itemmeta
+   LEFT JOIN wp_woocommerce_order_items
+      ON wp_woocommerce_order_items.order_item_id = wp_woocommerce_order_itemmeta.order_item_id
+   LEFT JOIN wp_posts
+      ON wp_posts.ID = wp_woocommerce_order_items.order_id WHERE 
+   meta_key = '_qty'  AND wp_woocommerce_order_items.order_id IN (
+        SELECT posts.ID AS post_id
+        FROM wp_posts AS posts
+        WHERE posts.post_type = 'shop_order' AND posts.post_status IN ( 'wc-completed', 'wc-processing', 'wc-on-hold' )
+    )   
+     GROUP BY wp_woocommerce_order_itemmeta.meta_value ";  
+  echo "<pre>"; print_r(($sql)); die;   
+  echo "<pre>"; print_r($wpdb->get_results($sql)); die;   

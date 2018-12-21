@@ -1,0 +1,89 @@
+1.FOR ADD PATH TO STYLE.CSS -> <?php bloginfo('template_url') ?>/
+
+2.FOR ADD PATH TO JS FILE -> <?php echo get_template_directory_uri(); ?>/
+
+3.For add path to logo to home page -> <?php  bloginfo('url');  ?>
+
+3.For add path to a image -> <?php bloginfo('template_url'); ?>/ 
+
+
+5.To add custom navigation menu
+   register_nav_menu( 'primary', __( 'Main Menu', 'practice' ) );	
+   To display navigation menu in front end
+                          <?php
+                                wp_nav_menu( array(
+                                'theme_location' => "primary",
+                                'menu_class'     => 'primary-menu',
+                                'items_wrap'      => '<ul id="%1$s" class="nav navbar-nav">%3$s</ul>'
+                                ));
+                            ?>
+
+
+6. To givew  a link to (in loop)
+
+       <?php the_permalink(); ?>
+
+
+
+7. To add jquey to wrodpress menu item use
+-
+<script>
+    jQuery(function($) {
+        $('.current_page_item a').addClass('demobtn');  
+    });
+</script>
+
+
+8. condition for post id if ( $post->ID == "6") { }else{}
+
+
+9. To use on server plugin wb-migate
+
+ change //hostname/projectname
+
+        //public_html/projectname
+
+
+10. To add path to php. file -> get_stylesheet_directory()
+
+
+11. for custom page template
+ /**
+   Template Name: home
+ */
+
+
+12. GEt meta Field   
+ 
+<?php $key_name = get_post_custom_values($key = 'bags_title');
+                        echo $key_name[0]; ?>
+
+
+
+13. To Find the featrue image in wordpress admin
+       <?php $prod_img = wp_get_attachment_url( get_post_thumbnail_id( get_the_id() ) ); ?>
+                                <img src="<?php echo $prod_img; ?>" width="850" height="438" class="img-responsive center-block">
+
+
+
+
+14.Next and previous pagination 
+     <?php previous_post_link('<strong>%link</strong>'); ?> 
+     <?php next_post_link('<strong>%link</strong>'); ?> 
+
+15. For Remove extra p tag br tag in content
+   remove_filter( 'the_content', 'wpautop' );
+
+
+16. scrooll down the page
+$('html,body').animate({
+        scrollTop: $(".second").offset().top},
+        'slow');
+
+
+17. To display editor data
+
+ <?php     
+      echo apply_filters('the_content', $res_products_modright[$l]['meta_value']);
+  ?> 
+

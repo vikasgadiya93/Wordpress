@@ -1,0 +1,43 @@
+user login //https://premium.wpmudev.org/forums/topic/wp-function-to-show-current-online-users
+ function  user_online_update(){
+
+    if ( is_user_logged_in()) {
+
+        // get the user activity the list
+        $logged_in_users = get_transient('online_status');
+
+        // get current user ID
+        $user = wp_get_current_user();
+
+        // check if the current user needs to update his online status;
+        // he does if he doesn't exist in the list
+        $no_need_to_update = isset($logged_in_users[$user->ID])
+
+            // and if his "last activity" was less than let's say ...1 minutes ago
+            && $logged_in_users[$user->ID] >  (time() - (1 * 60));
+
+        // update the list if needed
+        if(!$no_need_to_update){
+          $logged_in_users[$user->ID] = time();
+          set_transient('online_status', $logged_in_users, (2*60)); // 2 mins
+        }
+    }
+}
+add_action( 'wp', 'user_online_update' );
+
+function display_logged_in_users(){
+    // get the user activity the list
+    $logged_in_users = get_transient('online_status');
+
+    if ( !empty( $logged_in_users ) ) {
+        echo "<br/><strong>Logged in users are as following :</strong>";
+            foreach ( $logged_in_users as $key => $value) {
+                    $user = get_user_by( 'id', $key );
+                    echo '<br/> Looged in user name is ' . $user->display_name;
+            }
+    } else{
+        echo "<br/><strong>No user is logged in.</strong>";
+    }
+
+}
+ <?php display_logged_in_users();    ?>

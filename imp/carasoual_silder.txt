@@ -1,0 +1,37 @@
+<div id="myCarousel" class="carousel slide carousel-fade"> 
+        <!-- Indicators -->
+
+        <div class="carousel-inner">
+
+
+
+            <?php
+                global $wpdb,$table_prefix;
+                $tbl_name = "wp_testimonial";    
+                $sql = "select * from $tbl_name order by id asc" ;
+                $result = $wpdb->get_results($sql);
+
+                $i=0;
+                foreach ( $result as $print )   
+                {
+                ?>   
+                <div class="item <?php if($i==0){ ?> active <?php }  ?>">
+                    <div class="fill" style="background-image:url('<?php echo $print->img; ;?>')"></div>
+
+                    <div class="banner_text <?php if($i%2==1){ ?> banner_text1 <?php } ?>">
+                        <div class="container">
+                            <h1> <span><?php echo $print->text; ?> </span></h1ss>
+                        </div>
+
+                    </div>
+                </div>   
+                <?php $i++; } ?>
+
+
+        </div>
+        <ol class="carousel-indicators">
+            <?php for($j=0;$j<$i;$j++) { ?>
+                <li data-target="#myCarousel" data-slide-to="<?php echo $j; ?>" <?php if($j == 0) { ?> class="active"<?php } ?>></li>
+                <?php } ?>
+  
+  </ol>

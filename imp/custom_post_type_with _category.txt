@@ -1,0 +1,88 @@
+// custom post type === faq
+function faq() {
+
+    $labels = array(
+    'name'                  => _x( 'FAQ', 'FAQ General Name', 'text_domain' ),
+    'singular_name'         => _x( 'FAQ', 'FAQ Singular Name', 'text_domain' ),
+    'menu_name'             => __( 'FAQ', 'text_domain' ),
+    'name_admin_bar'        => __( 'FAQ', 'text_domain' ),
+    'parent_item_colon'     => __( 'Parent Item:', 'text_domain' ),
+    'all_items'             => __( 'All Items', 'text_domain' ),
+    'add_new_item'          => __( 'Add New Item', 'text_domain' ),
+    'add_new'               => __( 'Add New', 'text_domain' ),
+    'new_item'              => __( 'New Item', 'text_domain' ),
+    'edit_item'             => __( 'Edit Item', 'text_domain' ),
+    'update_item'           => __( 'Update Item', 'text_domain' ),
+    'view_item'             => __( 'View Item', 'text_domain' ),
+    'search_items'          => __( 'Search Item', 'text_domain' ),
+    'not_found'             => __( 'Not found', 'text_domain' ),
+    'not_found_in_trash'    => __( 'Not found in Trash', 'text_domain' ),
+    'items_list'            => __( 'Items list', 'text_domain' ),
+    'items_list_navigation' => __( 'Items list navigation', 'text_domain' ),
+    'filter_items_list'     => __( 'Filter items list', 'text_domain' ),
+    );
+    $args = array(
+    'label'                 => __( 'FAQ', 'text_domain' ),
+    'description'           => __( 'FAQ Description', 'text_domain' ),
+    'labels'                => $labels,
+    'supports'              => array( ),
+    'taxonomies'            => array(),
+    'hierarchical'          => false,
+    'public'                => true,
+    'show_in_menu'          => true,
+    'menu_position'         => 5,
+    'show_in_admin_bar'     => true,
+    'show_in_nav_menus'     => true,
+    'can_export'            => true,
+    'has_archive'           => true,        
+    'exclude_from_search'   => false,
+    'publicly_queryable'    => true,
+    'rewrite'         => array('slug' => 'faq'),
+    'capability_type'       => 'post',
+    "show_ui"        => true,
+    "supports"        => array("comments","title", "editor", "thumbnail", "author", "custom-fields") 
+    );
+    register_post_type( 'faq', $args );
+    flush_rewrite_rules();
+
+}
+add_action( 'init', 'faq', 0 );
+add_action( 'init', 'create_faq_categories' );
+function create_faq_categories() {
+    $labels = array(
+    'name'              => _x( 'FAQ Categories', 'taxonomy general name' ),
+    'singular_name'     => _x( 'FAQ Category', 'taxonomy singular name' ),
+    'search_items'      => __( 'Search Categories' ),
+    'all_items'         => __( 'All Categories' ),
+    'parent_item'       => __( 'Parent Category' ),
+    'parent_item_colon' => __( 'Parent Category:' ),
+    'edit_item'         => __( 'Edit Category' ),
+    'update_item'       => __( 'Update Category' ),
+    'add_new_item'      => __( 'Add New Category' ),
+    'new_item_name'     => __( 'New Category' ),
+    'menu_name'         => __( 'Category' ),
+    );
+
+    $args = array(
+    'hierarchical'      => true,
+    'labels'            => $labels,
+    'show_ui'           => true,
+    'show_admin_column' => true,
+    'query_var'         => true,
+    'rewrite'           => array( 'slug' => 'faq_category' ),
+
+    );
+
+    register_taxonomy( 'faq_category', array( 'faq' ), $args );
+}
+
+
+
+To single post faq page   -> single-faq.php
+To display by category -> taxonomy-faq-category.php
+To display all post -> template-faq.php
+To display arachive -> arachive-blog.php
+
+For half content
+
+<?php echo substr(strip_tags(get_the_content()),0,500); ?>

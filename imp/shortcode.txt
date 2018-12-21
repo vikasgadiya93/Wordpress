@@ -1,0 +1,27 @@
+https://www.smashingmagazine.com/2012/05/wordpress-shortcodes-complete-guide/
+https://designmodo.com/wordpress-shortcodes/
+https://code.tutsplus.com/tutorials/wordpress-shortcodes-the-right-way--wp-17165
+
+
+function recent_posts_function($atts){
+   extract(shortcode_atts(array(
+    'posts' => 1,
+    'post_type'=>post,
+    'col' => '3' 
+   ), $atts));
+
+   $return_string = '<ul class ="col-sm-'.$col.'">';
+   query_posts(array('orderby' => 'date', 'post_type'=> $post_type, 'order' => 'DESC' , 'showposts' => $posts));
+   if (have_posts()) :
+      while (have_posts()) : the_post();
+         $return_string .= '<li class ="col-sm-'.$col.'"><a href="'.get_permalink().'">'.get_the_title().'</a></li>';
+      endwhile;
+   endif;
+   $return_string .= '</ul>';
+
+   wp_reset_query();
+   return $return_string;
+}
+add_shortcode('recent-posts', 'recent_posts_function');
+
+

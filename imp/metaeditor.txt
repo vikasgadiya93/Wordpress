@@ -1,0 +1,66 @@
+  function price_save_meta_box_data( $post_id ) {
+        $amazon_url =  $_POST['amazon_url'] ;     
+        update_post_meta( $post_id, 'amazon_url', $amazon_url );
+    }
+    add_action( 'save_post', 'price_save_meta_box_data' );
+
+    
+    
+     function offer_content_add_meta_box() {
+            $screens_val = array( 'product' );
+            foreach ( $screens_val as $screen ) {  
+                add_meta_box(
+                'video_content_sectionid',
+                __( 'offer', 'offer_content_textdomain' ),
+                'offer_content_meta_box_callback',
+                $screen
+                );
+            }
+        }
+        add_action( 'add_meta_boxes', 'offer_content_add_meta_box' );
+        
+        
+        
+         function offer_content_meta_box_callback( $post ) {
+        // Add an nonce field so we can check for it later.
+        wp_nonce_field( 'offer_content_meta_box', 'offer_content_meta_box_nonce' );
+        /*
+        * Use get_post_meta() to retrieve an existing value
+      * from the database and use the value for the form.
+        */
+     <?php     $specail_offer = get_post_meta( $post->ID, 'specail_offer', true );
+        
+         $banner_content = get_post_meta( $post->ID, 'banner_content', true );
+
+
+    $settings = array(
+    'tinymce' => true,
+    'textarea_rows' => 10,
+    );
+    $editor_id = "banner_content";
+
+
+        $settings = array(
+        'tinymce' => true,
+        'textarea_rows' => 10,
+        );
+        $editor_id = "price_content";
+        echo '<table style="width:100%"><tr>
+        <tr>
+        <td><label for="price_title">';
+        _e( 'Specail Offer : ', 'get_in' );
+        echo '</label></td>';
+        //    echo '<td><input type="text" value="'.$amazon_url.'" name="amazon_url" id="amazon_url" style="width:100%; padding: 5px 0;"></td></tr>';
+        echo '<td><textarea name="specail_offer" id="specail_offer" style="width:100%; padding: 5px 0;" cols="" rows="">'.$specail_offer.'</textarea></td></tr>';
+   
+    echo '<tr><td>';
+    wp_editor( $specail_offer, "banner_content", $settings );'</td></tr>';
+         }
+    
+     function offer_save_meta_box_data( $post_id ) {
+        $specail_offer =  $_POST['specail_offer'] ;     
+        update_post_meta( $post_id, 'specail_offer', $specail_offer );
+    }
+    add_action( 'save_post', 'offer_save_meta_box_data' );
+    
+    ?>
